@@ -1,7 +1,5 @@
 #!/bin/bash
 # Set Hostname
-curl -4 ifconfig.me
-echo
 read -p 'Input hostname: ' namehost
 hostnamectl set-hostname $namehost && timedatectl set-timezone Asia/Ho_Chi_Minh
 
