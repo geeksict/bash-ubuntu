@@ -1,7 +1,7 @@
 #!/bin/bash
 # Remove pass for user default
 read -p 'Remove passwd User default (Y/n): ' choicermpasswd
-choice=${choice:-yes}
+choice=${choicermpasswd:-yes}
 if [$choicermpasswd=='Y'] || [$choicermpasswd=='y'] || [$choicermpasswd=='yes']; then
   read -p 'Input username default: ' unamedf
   passwd -d $unamedf
