@@ -5,7 +5,6 @@ choice=${choice:-yes}
 if [$choicermpasswd=='Y'] || [$choicermpasswd=='y'] || [$choicermpasswd=='yes']; then
   read -p 'Input username default: ' unamedf
   passwd -d $unamedf
-else
 fi
 # Update ubuntu
 apt-get update -y && apt update -y && apt upgrade -y
