@@ -1,5 +1,8 @@
 #!/bin/bash
 # Set Hostname
+sudo -i
+read -p 'Input username defautl: ' unamedf
+passwd -d $unamedf
 read -p 'Input hostname: ' namehost
 hostnamectl set-hostname $namehost && timedatectl set-timezone Asia/Ho_Chi_Minh
 
