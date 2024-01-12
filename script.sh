@@ -7,14 +7,8 @@ apt install --only-upgrade `apt list --upgradeable 5>/dev/null | cut -d/ -f1 | g
 
 sudo -i
 hostnamectl set-hostname mail.emaxnt.edu.vn && timedatectl set-timezone Asia/Ho_Chi_Minh
-apt-get update -y && apt upgrade -y
-
-apt update -y && apt install --only-upgrade python3-update-manager update-manager-core -y
-reboot
-
-sudo -i
 echo `curl -4 ifconfig.me` `hostname -f` localhost >> /etc/hosts
-apt install nano certbot -y
+apt install nano certbot iptables iptables-persistent -y
 
 iptables -I INPUT 4 -p tcp -m tcp --dport 80 -j ACCEPT
 iptables -I INPUT 5 -p tcp -m tcp --dport 443 -j ACCEPT
