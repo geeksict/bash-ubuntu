@@ -54,6 +54,7 @@ mv /etc/ssl/certs/iRedMail.crt{,.bak}
 mv /etc/ssl/private/iRedMail.key{,.bak}
 ln -s /etc/letsencrypt/live/`hostname -f`/fullchain.pem /etc/ssl/certs/iRedMail.crt
 ln -s /etc/letsencrypt/live/`hostname -f`/privkey.pem /etc/ssl/private/iRedMail.key
+(crontab -l ; echo "# SSL Let's Encrypt for iRedMail") | crontab -
 (crontab -l ; echo "1   2   *   *   *   certbot renew --post-hook '/usr/sbin/service postfix restart; /usr/sbin/service nginx restart; /usr/sbin/service dovecot restart'") | crontab -
 systemctl restart nginx
 systemctl restart postfix
