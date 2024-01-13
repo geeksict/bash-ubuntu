@@ -59,3 +59,6 @@ ln -s /etc/letsencrypt/live/`hostname -f`/privkey.pem /etc/ssl/private/iRedMail.
 systemctl restart nginx
 systemctl restart postfix
 systemctl restart dovecot
+
+# Reboot after install finished
+reboot
