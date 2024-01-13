@@ -13,6 +13,7 @@ apt install nano certbot iptables iptables-persistent -y
 # Config iptables & ip6tables
 iptables -F INPUT
 iptables -I INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT
 iptables -A INPUT -p icmp --icmp-type 8/0 -j ACCEPT
 iptables -A INPUT -p udp --sport ntp -j ACCEPT
 iptables -A INPUT -i lo -j ACCEPT
@@ -27,6 +28,7 @@ iptables -A INPUT -p tcp --dport 443 -m limit --limit 3/minute --limit-burst 70 
 iptables -A INPUT -j REJECT
 ip6tables -F INPUT
 ip6tables -I INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT
 ip6tables -A INPUT -p icmpv6 -j ACCEPT
 ip6tables -A INPUT -p udp --sport ntp -j ACCEPT
 ip6tables -A INPUT -s ::1/128 -j ACCEPT
