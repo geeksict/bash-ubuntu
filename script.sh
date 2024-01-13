@@ -50,3 +50,5 @@ echo `curl -6 ifconfig.me` `hostname -f` localhost >> /etc/hosts
 # Download & Install iRedMail Server v1.6.8
 wget https://github.com/iredmail/iRedMail/archive/refs/tags/1.6.8.tar.gz
 tar zxvf 1.6.8.tar.gz && cd iRedMail* && bash iRedMail.sh
+rm -rf 1.6.8.tar.gz
+rm -rf iRedMail*
