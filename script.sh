@@ -5,33 +5,41 @@ passwd -d ubuntu
 apt-get update -y && apt update -y && apt upgrade -y
 apt install --only-upgrade `apt list --upgradeable 5>/dev/null | cut -d/ -f1 | grep -v Listing`
 
-sudo -i
 hostnamectl set-hostname mail.emaxnt.edu.vn && timedatectl set-timezone Asia/Ho_Chi_Minh
-echo `curl -4 ifconfig.me` `hostname -f` localhost >> /etc/hosts
 apt install nano certbot iptables iptables-persistent -y
 
-iptables -I INPUT 4 -p tcp -m tcp --dport 80 -j ACCEPT
-iptables -I INPUT 5 -p tcp -m tcp --dport 443 -j ACCEPT
-iptables -I INPUT 6 -p tcp -m tcp --dport 25 -j ACCEPT
-iptables -I INPUT 7 -p tcp -m tcp --dport 587 -j ACCEPT
-iptables -I INPUT 8 -p tcp -m tcp --dport 143 -j ACCEPT
-iptables -I INPUT 9 -p tcp -m tcp --dport 995 -j ACCEPT
-iptables -I INPUT 10 -p tcp --dport 80 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
-ip6tables -I INPUT 1 -m state --state RELATED,ESTABLISHED -j ACCEPT
-ip6tables -I INPUT 2 -p icmp -j ACCEPT
-ip6tables -I INPUT 3 -j ACCEPT
-ip6tables -I INPUT 4 -p tcp -m tcp --dport 80 -j ACCEPT
-ip6tables -I INPUT 5 -p tcp -m tcp --dport 443 -j ACCEPT
-ip6tables -I INPUT 6 -p tcp -m tcp --dport 25 -j ACCEPT
-ip6tables -I INPUT 7 -p tcp -m tcp --dport 587 -j ACCEPT
-ip6tables -I INPUT 8 -p tcp -m tcp --dport 143 -j ACCEPT
-ip6tables -I INPUT 9 -p tcp -m tcp --dport 995 -j ACCEPT
-ip6tables -I INPUT 10 -p tcp --dport 80 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
+# Config iptables & ip6tables
+iptables -I INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p icmp --icmp-type 8/0 -j ACCEPT
+iptables -A INPUT -p udp --sport ntp -j ACCEPT
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+iptables -A INPUT -p tcp --dport 25 -j ACCEPT
+iptables -A INPUT -p tcp --dport 587 -j ACCEPT
+iptables -A INPUT -p tcp --dport 143 -j ACCEPT
+iptables -A INPUT -p tcp --dport 995 -j ACCEPT
+iptables -A INPUT -p tcp --dport 80 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
+iptables -A INPUT -j REJECT
+ip6tables -I INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+ip6tables -A INPUT -p icmpv6 -j ACCEPT
 ip6tables -A INPUT -p udp --sport ntp -j ACCEPT
-ip6tables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT
+ip6tables -A INPUT -s ::1/128 -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 80 -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 443 -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 25 -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 587 -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 143 -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 995 -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 80 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 443 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
 ip6tables -A INPUT -j REJECT
-service iptables save && service iptables restart || netfilter-persistent save
-reboot
+netfilter-persistent save
+
+# Set ip public for files hosts
+echo `curl -4 ifconfig.me` `hostname -f` localhost >> /etc/hosts
+echo `curl -6 ifconfig.me` `hostname -f` localhost >> /etc/hosts
 
 sudo -i
 wget https://github.com/iredmail/iRedMail/archive/refs/tags/1.6.8.tar.gz
