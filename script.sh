@@ -32,20 +32,11 @@ ip6tables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT
 ip6tables -A INPUT -p icmpv6 -j ACCEPT
 ip6tables -A INPUT -p udp --sport ntp -j ACCEPT
 ip6tables -A INPUT -s ::1/128 -j ACCEPT
-ip6tables -A INPUT -p tcp --dport 80 -j ACCEPT
-ip6tables -A INPUT -p tcp --dport 443 -j ACCEPT
-ip6tables -A INPUT -p tcp --dport 25 -j ACCEPT
-ip6tables -A INPUT -p tcp --dport 587 -j ACCEPT
-ip6tables -A INPUT -p tcp --dport 143 -j ACCEPT
-ip6tables -A INPUT -p tcp --dport 995 -j ACCEPT
-ip6tables -A INPUT -p tcp --dport 80 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
-ip6tables -A INPUT -p tcp --dport 443 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
 ip6tables -A INPUT -j REJECT
 netfilter-persistent save
 
 # Set ip public for files hosts
 echo `curl -4 ifconfig.me` `hostname -f` localhost >> /etc/hosts
-echo `curl -6 ifconfig.me` `hostname -f` localhost >> /etc/hosts
 
 # Download & Install iRedMail Server v1.6.8
 wget https://github.com/iredmail/iRedMail/archive/refs/tags/1.6.8.tar.gz
