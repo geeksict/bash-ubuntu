@@ -5,10 +5,13 @@ passwd -d ubuntu
 apt-get update -y && apt update -y && apt upgrade -y
 apt install --only-upgrade `apt list --upgradeable 5>/dev/null | cut -d/ -f1 | grep -v Listing`
 
-hostnamectl set-hostname mail.emaxnt.edu.vn && timedatectl set-timezone Asia/Ho_Chi_Minh
+# Update hostname & timezone
+read -p 'Input hostname: ' hostname1
+hostnamectl set-hostname $hostname1 && timedatectl set-timezone Asia/Ho_Chi_Minh
 apt install nano certbot iptables iptables-persistent -y
 
 # Config iptables & ip6tables
+iptables -F INPUT
 iptables -I INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -A INPUT -p icmp --icmp-type 8/0 -j ACCEPT
 iptables -A INPUT -p udp --sport ntp -j ACCEPT
@@ -22,6 +25,7 @@ iptables -A INPUT -p tcp --dport 995 -j ACCEPT
 iptables -A INPUT -p tcp --dport 80 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
 iptables -A INPUT -p tcp --dport 443 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
 iptables -A INPUT -j REJECT
+ip6tables -F INPUT
 ip6tables -I INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 ip6tables -A INPUT -p icmpv6 -j ACCEPT
 ip6tables -A INPUT -p udp --sport ntp -j ACCEPT
@@ -41,4 +45,6 @@ netfilter-persistent save
 echo `curl -4 ifconfig.me` `hostname -f` localhost >> /etc/hosts
 echo `curl -6 ifconfig.me` `hostname -f` localhost >> /etc/hosts
 
-
+# Download & Install iRedMail Server v1.6.8
+wget https://github.com/iredmail/iRedMail/archive/refs/tags/1.6.8.tar.gz
+tar zxvf 1.6.8.tar.gz && cd iRedMail* && bash iRedMail.sh
