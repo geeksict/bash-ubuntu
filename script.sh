@@ -1,4 +1,12 @@
 #!/bin/bash
+
+# Disable IPv6 Ubuntu
+touch /etc/sysctl.d/60-custom.conf
+echo 'net.ipv6.conf.all.disable_ipv6 = 1' >> /etc/sysctl.d/60-custom.conf
+echo 'net.ipv6.conf.default.disable_ipv6 = 1' >> /etc/sysctl.d/60-custom.conf
+echo 'net.ipv6.conf.lo.disable_ipv6 = 1' >> /etc/sysctl.d/60-custom.conf
+sysctl -p && systemctl restart procps
+
 # Remove pass for user default
 passwd -d ubuntu
 # Update ubuntu
@@ -26,13 +34,6 @@ iptables -A INPUT -p tcp --dport 995 -j ACCEPT
 iptables -A INPUT -p tcp --dport 80 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
 iptables -A INPUT -p tcp --dport 443 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
 iptables -A INPUT -j REJECT
-ip6tables -F INPUT
-ip6tables -I INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
-ip6tables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT
-ip6tables -A INPUT -p icmpv6 -j ACCEPT
-ip6tables -A INPUT -p udp --sport ntp -j ACCEPT
-ip6tables -A INPUT -s ::1/128 -j ACCEPT
-ip6tables -A INPUT -j REJECT
 netfilter-persistent save
 
 # Set ip public for files hosts
