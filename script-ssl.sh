@@ -1,4 +1,4 @@
-certbot certonly --webroot --agree-tos -m phucpt2802@gmail.com -w /var/www/html -d `hostname -f`
+certbot certonly --webroot --agree-tos -w /var/www/html -d `hostname -f`
 chmod 0644 /etc/letsencrypt/{live,archive}
 mv /etc/ssl/certs/iRedMail.crt{,.bak}   
 mv /etc/ssl/private/iRedMail.key{,.bak}
