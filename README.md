@@ -1,5 +1,4 @@
-sudo -i
-
+Step 1: sudo -i
 bash <(curl -s https://raw.githubusercontent.com/geeksict/bash-ubuntu/main/script.sh)
-
-bash <(curl -s https://raw.githubusercontent.com/geeksict/bash-ubuntu/main/script-ssl-relay.sh)
+Step 2:
+bash <(curl -s https://raw.githubusercontent.com/geeksict/bash-ubuntu/main/script-ssl.sh)
