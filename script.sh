@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Disable IPv6 Ubuntu
-touch /etc/sysctl.d/60-custom.conf
-echo 'net.ipv6.conf.all.disable_ipv6 = 1' >> /etc/sysctl.d/60-custom.conf
-echo 'net.ipv6.conf.default.disable_ipv6 = 1' >> /etc/sysctl.d/60-custom.conf
-echo 'net.ipv6.conf.lo.disable_ipv6 = 1' >> /etc/sysctl.d/60-custom.conf
-sysctl -p && systemctl restart procps
+#touch /etc/sysctl.d/60-custom.conf
+#echo 'net.ipv6.conf.all.disable_ipv6 = 1' >> /etc/sysctl.d/60-custom.conf
+#echo 'net.ipv6.conf.default.disable_ipv6 = 1' >> /etc/sysctl.d/60-custom.conf
+#echo 'net.ipv6.conf.lo.disable_ipv6 = 1' >> /etc/sysctl.d/60-custom.conf
+#sysctl -p && systemctl restart procps
 
 # Remove pass for user default
 passwd -d ubuntu
@@ -16,6 +16,11 @@ apt install --only-upgrade `apt list --upgradeable 5>/dev/null | cut -d/ -f1 | g
 # Update hostname & timezone
 read -p 'Input hostname: ' hostname1
 hostnamectl set-hostname $hostname1 && timedatectl set-timezone Asia/Ho_Chi_Minh
+
+# Set ip public for files hosts
+echo `curl -4 ifconfig.me` `hostname -f` localhost >> /etc/hosts
+echo `curl -6 ifconfig.me` `hostname -f` localhost >> /etc/hosts
+
 apt install nano certbot iptables iptables-persistent -y
 
 # Config iptables & ip6tables
@@ -35,9 +40,6 @@ iptables -A INPUT -p tcp --dport 80 -m limit --limit 3/minute --limit-burst 70 -
 iptables -A INPUT -p tcp --dport 443 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
 iptables -A INPUT -j REJECT
 netfilter-persistent save
-
-# Set ip public for files hosts
-echo `curl -4 ifconfig.me` `hostname -f` localhost >> /etc/hosts
 
 # Download & Install iRedMail Server v1.6.8
 wget https://github.com/iredmail/iRedMail/archive/refs/tags/1.6.8.tar.gz
