@@ -23,7 +23,7 @@ echo `curl -6 ifconfig.me` `hostname -f` localhost >> /etc/hosts
 
 apt install nano certbot iptables iptables-persistent -y
 
-# Config iptables & ip6tables
+# Set rules v4 for firewall
 iptables -F INPUT
 iptables -I INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT
@@ -39,7 +39,26 @@ iptables -A INPUT -p tcp --dport 995 -j ACCEPT
 iptables -A INPUT -p tcp --dport 80 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
 iptables -A INPUT -p tcp --dport 443 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
 iptables -A INPUT -j REJECT
+
+# Set rules v4 for firewall
+ip6tables -F INPUT
+ip6tables -I INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT
+ip6tables -A INPUT -p icmpv6 --icmpv6-type echo-request -j ACCEPT
+ip6tables -A INPUT -p udp --sport ntp -j ACCEPT
+ip6tables -A INPUT -i lo -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 80 -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 443 -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 25 -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 587 -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 143 -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 995 -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 80 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 443 -m limit --limit 3/minute --limit-burst 70 -j ACCEPT
+ip6tables -A INPUT -j REJECT
+# Save
 netfilter-persistent save
+
 
 # Download & Install iRedMail Server v1.6.8
 wget https://github.com/iredmail/iRedMail/archive/refs/tags/1.6.8.tar.gz
@@ -47,20 +66,6 @@ tar zxvf 1.6.8.tar.gz && cd iRedMail* && bash iRedMail.sh
 cd ..
 rm -rf 1.6.8.tar.gz
 rm -rf iRedMail*
-
-# Creat ssl let's encrypt for iRedMail
-read -p 'Inport email for reg SSL Let's Encrypt: ' mailreg
-certbot certonly --webroot --agree-tos -m $mailreg -w /var/www/html -d `hostname -f`
-chmod 0644 /etc/letsencrypt/{live,archive}
-mv /etc/ssl/certs/iRedMail.crt{,.bak}
-mv /etc/ssl/private/iRedMail.key{,.bak}
-ln -s /etc/letsencrypt/live/`hostname -f`/fullchain.pem /etc/ssl/certs/iRedMail.crt
-ln -s /etc/letsencrypt/live/`hostname -f`/privkey.pem /etc/ssl/private/iRedMail.key
-(crontab -l ; echo "# SSL Let's Encrypt for iRedMail") | crontab -
-(crontab -l ; echo "1   2   *   *   *   certbot renew --post-hook '/usr/sbin/service postfix restart; /usr/sbin/service nginx restart; /usr/sbin/service dovecot restart'") | crontab -
-systemctl restart nginx
-systemctl restart postfix
-systemctl restart dovecot
 
 # Reboot after install finished
 reboot
