@@ -5,3 +5,7 @@ bash <(curl -s https://raw.githubusercontent.com/geeksict/bash-ubuntu/main/scrip
 Step 2:
 
 bash <(curl -s https://raw.githubusercontent.com/geeksict/bash-ubuntu/main/script-ssl.sh)
+
+Config SMTP Relay O365
+
+bash <(curl -s https://raw.githubusercontent.com/geeksict/bash-ubuntu/main/relay-O365.sh)
