@@ -64,7 +64,7 @@ netfilter-persistent save
 wget https://github.com/iredmail/iRedMail/archive/refs/tags/1.6.8.tar.gz
 tar zxvf 1.6.8.tar.gz && cd iRedMail* && bash iRedMail.sh
 cd ..
-rm -rf 1.6.8.tar.gz
+rm -rf *.tar.gz
 rm -rf iRedMail*
 
 # Reboot after install finished
