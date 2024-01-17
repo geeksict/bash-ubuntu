@@ -44,9 +44,8 @@ iptables -A INPUT -j REJECT
 ip6tables -F INPUT
 ip6tables -I INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 ip6tables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT
-ip6tables -A INPUT -p icmpv6 --icmpv6-type echo-request -j ACCEPT
+ip6tables -A INPUT -p icmpv6 -j ACCEPT
 ip6tables -A INPUT -p udp --sport ntp -j ACCEPT
-ip6tables -A INPUT -i lo -j ACCEPT
 ip6tables -A INPUT -p tcp --dport 80 -j ACCEPT
 ip6tables -A INPUT -p tcp --dport 443 -j ACCEPT
 ip6tables -A INPUT -p tcp --dport 25 -j ACCEPT
