@@ -67,4 +67,7 @@ rm -rf *.tar.gz
 rm -rf iRedMail*
 
 # Reboot after install finished
+read -p 'Reboot System (Y/n): ' reboot123
+if [ "$reboot123" == "y" ]; then
 reboot
+fi
