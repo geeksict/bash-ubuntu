@@ -1,8 +1,22 @@
 #!/bin/bash
 
 # Ubuntu 24.04
+
 # Update/Upgrade 
 apt upgrade -y && apt update -y
-# Install package
-apt install nano unzip nginx -y
 
+# Install package
+apt install nano unzip apache2 mariadb-server -y
+sudo systemctl start apache2 && sudo systemctl enable apache2
+
+systemctl enable mariadb && systemctl start mariadb && systemctl restart mariadb && systemctl status mariadb
+mysql_secure_installation
+
+# Install PHP 8.3
+apt install php8.3 libapache2-mod-php php8.3-common php8.3-cli php8.3-mbstring php8.3-bcmath php8.3-fpm php8.3-mysql php8.3-zip php8.3-gd php8.3-curl php8.3-xml -y
+#
+#
+#
+#
+#
+#
