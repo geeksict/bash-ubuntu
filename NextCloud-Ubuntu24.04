@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Ubuntu 24.04
+# Update/Upgrade 
+apt upgrade -y && apt update -y
+# Install package
+apt install nano unzip nginx -y
+
